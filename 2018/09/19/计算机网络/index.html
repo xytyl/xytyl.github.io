@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="Mapleaf">
 <meta property="og:description" content="应用层进程通过套接字向网络收发报文，套接字是应用层和运输层的接口。 IP地址标识主机，端口号标识进程。Web服务器的端口号为80，SMTP的端口号为25。 HTTPWeb的应用层协议是超文本传输协议(HTTP) 客户端通过套接字接口发送HTTP请求报文，并从套接字接口接收HTTP响应报文。 服务端不存储任何客户端的信息，即客户几秒内连续请求同一服务端数据，每次都会反馈，是一个无状态协议。 非持续连">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/09/19/计算机网络/计算机网络/IPv4.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/09/19/计算机网络/计算机网络/IPv6.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/09/19/计算机网络/IPv4.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/09/19/计算机网络/IPv6.jpg">
 <meta property="og:updated_time" content="2018-09-09T07:22:24.600Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机网络">
 <meta name="twitter:description" content="应用层进程通过套接字向网络收发报文，套接字是应用层和运输层的接口。 IP地址标识主机，端口号标识进程。Web服务器的端口号为80，SMTP的端口号为25。 HTTPWeb的应用层协议是超文本传输协议(HTTP) 客户端通过套接字接口发送HTTP请求报文，并从套接字接口接收HTTP响应报文。 服务端不存储任何客户端的信息，即客户几秒内连续请求同一服务端数据，每次都会反馈，是一个无状态协议。 非持续连">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/19/计算机网络/计算机网络/IPv4.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/19/计算机网络/IPv4.jpg">
 
 
 
@@ -649,7 +649,7 @@
 <p>交换结构中可以采用三种方式完成：内存交换、总线交换、多条总线组成的纵横式交换（非阻塞，并行转发多个分组）。</p>
 <h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><p>IP的服务模型是<strong>尽力而为交付服务</strong>，不做任何保证，因此IP被称为<strong>不可靠服务</strong>。</p>
 <p><strong>IPv4的数据报格式</strong></p>
-<p><img src="计算机网络\IPv4.jpg" alt=""></p>
+<p><img src="/2018/09/19/计算机网络/IPv4.jpg" alt=""></p>
 <ul>
 <li>版本：4比特，规定IP协议版本</li>
 <li>首部长度：4比特，由于可能存在的选项字段而标识首部长度，选项为空时首部长度20字节</li>
@@ -670,7 +670,7 @@
 <p>一个子网有一台DHCP服务器或者DHCP中继代理（一般是一台路由器），一个新主机向端口67发送UDP报文，即<strong>DHCP发现报文</strong>，通过子网广播的形式找到DHCP服务器。</p>
 <p><strong>网络地址转换</strong>（NAT）通过改变端口号识别主机，改变的端口号维护在<strong>NAT转换表</strong>中。</p>
 <h3 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h3><p><strong>IPv6数据包格式</strong></p>
-<p><img src="计算机网络\IPv6.jpg" alt=""></p>
+<p><img src="/2018/09/19/计算机网络/IPv6.jpg" alt=""></p>
 <ul>
 <li>版本：表示IP版本号，值为6</li>
 <li>流量类型：区分不同类型的IP数据包，如要求低时延的实时数据包（IP电话应用）及非实时数据包（FTP）等。</li>
