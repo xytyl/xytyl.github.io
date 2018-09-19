@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="应用层进程通过套接字向网络收发报文，套接字是应用层和运输层的接口。 IP地址标识主机，端口号标识进程。Web服务器的端口号为80，SMTP的端口号为25。 HTTPWeb的应用层协议是超文本传输协议(HTTP) 客户端通过套接字接口发送HTTP请求报文，并从套接字接口接收HTTP响应报文。 服务端不存储任何客户端的信息，即客户几秒内连续请求同一服务端数据，每次都会反馈，是一个无状态协议。 非持续连">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络">
+<meta property="og:url" content="http://yoursite.com/2018/09/19/计算机网络/index.html">
+<meta property="og:site_name" content="Mapleaf">
+<meta property="og:description" content="应用层进程通过套接字向网络收发报文，套接字是应用层和运输层的接口。 IP地址标识主机，端口号标识进程。Web服务器的端口号为80，SMTP的端口号为25。 HTTPWeb的应用层协议是超文本传输协议(HTTP) 客户端通过套接字接口发送HTTP请求报文，并从套接字接口接收HTTP响应报文。 服务端不存储任何客户端的信息，即客户几秒内连续请求同一服务端数据，每次都会反馈，是一个无状态协议。 非持续连">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/09/19/计算机网络/计算机网络/IPv4.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/09/19/计算机网络/计算机网络/IPv6.jpg">
+<meta property="og:updated_time" content="2018-09-09T07:22:24.600Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机网络">
+<meta name="twitter:description" content="应用层进程通过套接字向网络收发报文，套接字是应用层和运输层的接口。 IP地址标识主机，端口号标识进程。Web服务器的端口号为80，SMTP的端口号为25。 HTTPWeb的应用层协议是超文本传输协议(HTTP) 客户端通过套接字接口发送HTTP请求报文，并从套接字接口接收HTTP响应报文。 服务端不存储任何客户端的信息，即客户几秒内连续请求同一服务端数据，每次都会反馈，是一个无状态协议。 非持续连">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/19/计算机网络/计算机网络/IPv4.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/19/计算机网络/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>计算机网络 | Mapleaf</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mapleaf</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/计算机网络/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mapleaf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mapleaf">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计算机网络
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-19 09:22:48" itemprop="dateCreated datePublished" datetime="2018-09-19T09:22:48+08:00">2018-09-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-09 15:22:24" itemprop="dateModified" datetime="2018-09-09T15:22:24+08:00">2018-09-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书笔记/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h1><p>进程通过<strong>套接字</strong>向网络收发报文，套接字是应用层和运输层的接口。</p>
+<p>IP地址标识主机，端口号标识进程。Web服务器的端口号为80，SMTP的端口号为25。</p>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><pre><code>Web的应用层协议是超文本传输协议(HTTP)
+</code></pre><p>客户端通过套接字接口发送HTTP请求报文，并从套接字接口接收HTTP响应报文。</p>
+<p>服务端不存储任何客户端的信息，即客户几秒内连续请求同一服务端数据，每次都会反馈，是一个<strong>无状态协议</strong>。</p>
+<p><strong>非持续连接</strong>：每个请求/响应经一个单独TCP发送<br><strong>持续连接</strong>：所有请求/响应经由相同的TCP发送</p>
+<p>HTTP默认为持续连接，但也可以配置为非持续连接。</p>
+<h3 id="HTTP报文格式"><a href="#HTTP报文格式" class="headerlink" title="HTTP报文格式"></a>HTTP报文格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GET /somedir/page.html HTTP/1.1            //HTTP请求报文</span><br><span class="line">Host: www.someschool.edu</span><br><span class="line">Connection: close</span><br><span class="line">User-agent: Mozilla/5.0</span><br><span class="line">Accept-language: fr</span><br><span class="line">（data data data data data ...）</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第一行为<strong>请求行</strong></p>
+<ul>
+<li><p>方法字段</p>
+</li>
+<li><p>URL字段</p>
+</li>
+<li><p>HTTP版本字段</p>
+</li>
+</ul>
+</li>
+<li><p>第二行至第五行为<strong>首部行</strong></p>
+<ul>
+<li><p>Host：主机名；</p>
+</li>
+<li><p>Connection：表示不使用持续连接，请求完毕就关闭连接；</p>
+</li>
+<li><p>User-agent：指明用户代理，即向服务器发送请求的浏览器类型，如Mozilla/5.0就是Firefox浏览器；</p>
+</li>
+<li><p>Accept-language：表示希望得到的语言版本，如fr为法语。</p>
+</li>
+</ul>
+</li>
+<li><p>第六行为<strong>实体体</strong>，GET方法的实体体为空，POST方法会在实体体放入表单，当然使用GET也可以在URL后拼接<code>? name &amp; year</code>实现表单请求。</p>
+</li>
+</ul>
+<p>其余方法字段：</p>
+<ul>
+<li><p>HEAD方法类似于GET方法，服务端收到HEAD请求时将会用一个HTTP报文响应但并不返回，更多地是作为调试跟踪之用。</p>
+</li>
+<li><p>PUT方法常与Web发行工具联合使用，允许用户上传对象到指定的Web服务器上指定的目录。</p>
+</li>
+<li><p>DELETE方法允许用户删除Web服务器上的对象。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK                       //HTTP响应报文</span><br><span class="line">Connection: close</span><br><span class="line">Date: Tue, 18 Aug 2015 15:44:04 GMT</span><br><span class="line">Server: Apache/2.2.3 (CentOS)</span><br><span class="line">Last-Modified: Tue, 18 Aug 2015 15:11:03 GMT</span><br><span class="line">Content-Length: 6821</span><br><span class="line">Content-Type: text/html</span><br><span class="line">(data data data data data ...)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第一行为<strong>状态行</strong></p>
+<ul>
+<li><p>协议版本字段</p>
+</li>
+<li><p>状态码</p>
+</li>
+<li><p>状态信息</p>
+</li>
+</ul>
+</li>
+<li><p>第二行至第八行为<strong>首部行</strong></p>
+<ul>
+<li><p>Connection：同请求报文，发送完成后关闭TCP连接</p>
+</li>
+<li><p>Date：发送该响应报文的日期时间</p>
+</li>
+<li>Server：表明该报文由一台Apache Web服务器产生</li>
+<li>Last-Modified：最后修改时间，与下文中Web缓存器协同使用</li>
+<li>Content-Length：被发送对象的字节数</li>
+<li>Content-Type：表明实体体中的对象是HTML文本</li>
+</ul>
+</li>
+<li><p>第九行为<strong>实体体</strong></p>
+</li>
+</ul>
+<p><strong>常见响应状态码</strong>：</p>
+<ul>
+<li>200 OK：请求成功</li>
+<li>301 Moved Permanently：请求的对象已经被永久转移了，新的URL定义在响应报文的Location首部行中</li>
+<li>304 Not Modified：请求内容未被修改</li>
+<li>400 Bad Request：一个通用差错代码，指示该请求不能被服务器理解</li>
+<li>404 Not Found：被请求的文档不在服务器上</li>
+<li>505 HTTP Version Not Supported：服务器不支持请求报文使用的HTTP协议版本</li>
+</ul>
+<h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><pre><code>HTTP是无状态的，但一个Web站点通常希望能够识别用户，为此HTTP使用cookie对用户进行跟踪。
+</code></pre><p>1.客户端请求服务器，服务器生成一个唯一识别码（假设为1674）并存于后端数据库<br>2.服务端响应报文包含一个<code>Set-cookie：1674</code>首部行并响应客户端<br>3.客户端会在浏览器的cookie文件中保存服务端主机名与该cookie值<br>4.客户端之后访问该服务器时会在请求报文中包含一个<code>Cookie：1674</code>首部行</p>
+<p>通过这种方式，服务器就会知道1674这个用户以什么顺序、什么时间访问了什么页面，例如电商平台可以根据cookie管理用户放入购物车的商品列表。</p>
+<h3 id="Web缓存"><a href="#Web缓存" class="headerlink" title="Web缓存"></a>Web缓存</h3><p><strong>Web缓存器</strong>也叫<strong>代理服务器</strong>，有自己的磁盘存储空间，并在其中保存最近请求过的对象的副本，类似于初始Web服务器和客户端之间的一个中转缓存区。</p>
+<ol>
+<li>客户端发起一个HTTP请求，与Web缓存器建立TCP连接</li>
+<li>Web缓存器中有该对象副本则返回响应报文</li>
+<li>Web缓存器中没有就去向初始Web服务器请求，随后再发回给客户端</li>
+</ol>
+<p>使用Web缓存器有两个原因：</p>
+<ul>
+<li>大大减少对客户请求的响应时间</li>
+<li>减少接入链路到因特网的通信量，降低成本</li>
+</ul>
+<p>使用Web缓存器有一个问题，就是其中的数据有可能是陈旧的，这时Web缓存器可以向初始服务器发送包含<code>If-modified-since</code>首部行的请求报文，其值是之前服务端响应报文中的<code>Last-Modified</code>首部行的值，表明当前Web缓存器的数据是该时间更新的，初始服务器收到请求报文吼比对时间，如果未修改就返回空体304。</p>
+<h3 id="与SMTP对比"><a href="#与SMTP对比" class="headerlink" title="与SMTP对比"></a>与SMTP对比</h3><ul>
+<li>HTTP是一个拉协议，即用户使用HTTP从服务器拉取信息；SMTP是一个推协议，即发送邮件服务器把文件推向接收邮件服务器</li>
+<li>HTTP将每个对象封装到它自己的HTTP响应报文中；SMTP将所有对象放在一个报文之中</li>
+<li>SMTP要求每个报文采用7bit ASCII码；HTTP则没有这种限制</li>
+</ul>
+<h2 id="SMTP"><a href="#SMTP" class="headerlink" title="SMTP"></a>SMTP</h2><p>上面说过SMTP是一个推协议，所以用户在本地PC如何拉取他的邮件服务器上的邮件呢？可以通过POP3、IMAP以及HTTP来解决。</p>
+<h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><pre><code>域名系统（DNS）能够将主机名转换为IP地址，是应用层协议，使用53号端口，运行在UDP之上
+</code></pre><p><strong>DNS解析HTTP请求报文过程</strong>：</p>
+<ol>
+<li>同一台用户主机上运行着DNS应用的客户端</li>
+<li>浏览器将URL的主机名传给DNS应用的客户端</li>
+<li>DNS客户端向DNS服务器发送一个包含主机名的请求</li>
+<li>DNS客户端最终会收到一个包含IP地址的报文</li>
+<li>浏览器用DNS客户端取到的IP地址向对应的服务端发起TCP连接</li>
+</ol>
+<p><strong>DNS的其他功能</strong>：</p>
+<ul>
+<li>主机别名：主机可以拥有别名，DNS可以通过主机别名来获得对应的<strong>规范主机名</strong>以及IP地址</li>
+<li>邮件服务器别名：类似于主机别名，简化记忆，如雅虎邮件服务器的别名为<code>yahoo.com</code>，而其规范名称可能非常复杂</li>
+<li>负载分配：一个站点可以有多台服务器，每个服务器都有自己的IP地址，这些IP地址集合对应同一个规范主机名，客户端总是向IP地址排在最前的服务器发送HTTP请求报文，DNS就可以在这些服务器中循环分配负载，防止客户端都只请求同一个服务器</li>
+</ul>
+<p>DNS使用大量DNS服务器，并层次分布于全世界，大致分为三类：<strong>根DNS服务器</strong>、<strong>顶级域DNS服务器</strong>（com、net等）、<strong>权威DNS服务器</strong></p>
+<p>还有一类<strong>本地DNS服务器</strong>，每个ISP都有一台本地DNS服务器，一台主机想通过DNS查<a href="http://www.baidu.com的IP地址流程：" target="_blank" rel="noopener">www.baidu.com的IP地址流程：</a></p>
+<ol>
+<li>向本地DNS服务器发送查询报文</li>
+<li>本地DNS服务器将该报文转发到根DNS服务器，根DNS服务器返回负责com的顶级域服务器的IP地址列表</li>
+<li>本地DNS服务器再向这些顶级域服务器之一请求，返回baidu.com的权威DNS服务器IP地址</li>
+<li>本地DNS服务器向权威服务器请求，返回<a href="http://www.baidu.com的IP地址" target="_blank" rel="noopener">www.baidu.com的IP地址</a></li>
+</ol>
+<p>本地DNS服务器在请求后可以缓存主机名/IP地址对，这样就可以大大减少请求消耗，DNS服务器在一段时间后会丢弃缓存信息。</p>
+<h1 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h1><pre><code>运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，应用层报文转换为运输层报文段
+</code></pre><h2 id="多路复用与多路分解"><a href="#多路复用与多路分解" class="headerlink" title="多路复用与多路分解"></a>多路复用与多路分解</h2><pre><code>指由网络层提供的主机到主机的交付服务延伸到主机上进程到进程的交付服务
+</code></pre><p><strong>多路复用</strong>：源主机从不同套接字收集数据块并封装首部信息形成报文段，并将之传递到网络层的过程。<br><strong>多路分解</strong>：将运输层报文段中的数据交付到正确的套接字的过程。</p>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><pre><code>UDP是无连接的，只提供了复用/分解功能及少量的差错检测
+</code></pre><p><strong>UDP报文段结构</strong>：</p>
+<p>源端口号  | 目的端口号<br>长度 | 检验和<br>应用数据（报文）||<br>————- |</p>
+<p>UDP首部有4个字段，每个字段2个字节，长度为首部加数据的总字节数，接收方使用检验和来检查报文段是否出现差错。</p>
+<p>检验和的计算方式：对报文段中所有16比特字段的和进行反码运算，求和溢出回卷；接收端全部的4个16比特字段（包括检验和）加在一起，如果结果全为1则没有差错。</p>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><pre><code>TCP是全双工的，即连接双方的进程可以同时收发报文
+</code></pre><p>TCP和UDP都没有加密机制，通过<strong>安全套接字层SSL</strong>可以实现TCP的加密，SSL在应用层实现，发送进向SSL套接字传递明文数据，SSL加密后传递给TCP，接收端TCP将密文传递给上层SSL解密。SSL提供了加密、数据完整性和端点鉴别的功能。</p>
+<p><strong>rdt3.0</strong>是一个停等协议，依靠ACK 0 和ACK 1、检验和、定时器实现了可靠传输。然而rdt3.0的效率极低，因此可以采用<strong>流水线技术</strong>增加效率。</p>
+<h3 id="回退N步（GBN）"><a href="#回退N步（GBN）" class="headerlink" title="回退N步（GBN）"></a>回退N步（GBN）</h3><pre><code>回退N步协议中，允许发送方发送多个分组，但流水线中未确认的分组数不能超过N，N被称为窗口长度，因此GBN也被称为滑动窗口协议。
+</code></pre><p>GBN协议的序号范围分为四种</p>
+<ul>
+<li>已确认</li>
+<li>已发送但未被确认</li>
+<li>可发送但还未被发送</li>
+<li>不可发送（待确认分组超过N，所以之后的分组不可发送）</li>
+</ul>
+<p>GBN同时顺序发送N个分组，如果其中一个未收到ACK，即便后面的分组收到也会丢弃，接收端会重发已收到的最近的一个ACK，发送端会重新发送该ACK后续的分组，这种模式叫做<strong>累计确认</strong>。</p>
+<h3 id="选择重传（SR）"><a href="#选择重传（SR）" class="headerlink" title="选择重传（SR）"></a>选择重传（SR）</h3><p>由于GBN有可能重传大量分组，效率不高，因此SR只让发送方仅重传那些可能在接收方出错的分组。发送方和接收方一起向前推进窗口，但有可能不同步。</p>
+<p>TCP是累计确认，因此更像GBN，但是TCP会将正确接收但失序的报文段缓存起来，因此当分组x丢失时，发送端只会重传x而不是x及x之后的报文段都重传。</p>
+<h3 id="TCP连接"><a href="#TCP连接" class="headerlink" title="TCP连接"></a>TCP连接</h3><p>当三次握手期间，TCP会设置<strong>发送缓存</strong>，套接字传递的数据流就保存在发送缓存中，TCP可放入报文段的数据量受限于<strong>最大报文段长度（MSS）</strong>，MSS指不包含首部的应用层数据的最大长度。接收端会将接收的报文段存于<strong>接收缓存</strong>中，应用程序从该缓存中读取数据流。</p>
+<h3 id="TCP报文段结构"><a href="#TCP报文段结构" class="headerlink" title="TCP报文段结构"></a>TCP报文段结构</h3><p>源端口号  | 目的端口号<br>序号||<br>确认号||<br>首部长度 等| 接收窗口<br>因特网检验和 | 紧急数据指针<br>选项||<br>应用数据（报文）||<br>————- | ————</p>
+<ul>
+<li>首部长度：由于TCP首部的选项字段长度不定，因此需要首部长度字段</li>
+<li>选项：用于发送方和接收方协商MSS时，或在高速网络环境下用作窗口调节因子时使用</li>
+<li><p>6比特的标志字段</p>
+<ul>
+<li>ACK用于指示确认字段中的值是有效的，即该报文段包括一个对已被成功接收报文段的确认</li>
+<li>RST、SYN、FIN用于连接建立和拆除</li>
+<li>CWR、ECE用于明确拥塞通告</li>
+<li>PSH被置位时指示接收方应立即将数据交给上层</li>
+<li>URG用来指示报文段里存在着被发送端的上层置为“紧急”的数据</li>
+</ul>
+</li>
+</ul>
+<p><strong>序号和确认号</strong></p>
+<p>TCP把数据看成有序的字节流，因此一个报文段的序号是其字节流首字节的编号；<br>主机A和B在同一TCP连接上，A的确认号是A期望从B收到的下一字节的序号。例如A已经收到B的0~535字节，那么A向B发送的报文段的确认号就是536。</p>
+<h3 id="往返时间的估计和超时"><a href="#往返时间的估计和超时" class="headerlink" title="往返时间的估计和超时"></a>往返时间的估计和超时</h3><p>一次RTT指从某报文段被发出到对该报文段的确认被收到之间的时间量；<br>TCP间歇进行一次RTT测量，之后通过对RTT的加权平均值得出EstimatedRTT，即为平均估时；<br>RTT的偏差值DevRTT可以表示时间波动；<br>通过EstimatedRTT和DevRTT即可计算出应该使用的重传超时间隔TimeoutInterval。</p>
+<h3 id="重传超时间隔加倍"><a href="#重传超时间隔加倍" class="headerlink" title="重传超时间隔加倍"></a>重传超时间隔加倍</h3><p>当TCP超时重传时，超时间隔将翻倍，如果仍然超时，那就再翻倍重传，直到收到ACK或者收到上层应用的数据时恢复为TimeoutInterval。这样做可以比较优雅地处理在网络拥挤时，即太多分组到达一台或多台路由器产生的丢包或排队时延的情况。</p>
+<h3 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h3><p>接收端在发现报文段丢失后，在之后返回的ACK都会是丢之前的报文段所应返回的ACK，这个ACK叫做<strong>冗余ACK</strong>，发送端收到3个冗余ACK就会进行快速重传，即不等待超时直接重传丢失的报文段。</p>
+<h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><p>TCP连接的每一侧主机都有接收缓存，如果接收方应用读取缓存的速度比另一侧传输给缓存的速度慢，就有可能缓存溢出。因此，主机B会维护一个<strong>接收窗口</strong>，其中记录还有多少可用的缓存空间，并在报文段中发送给A，通知A自己还有多少可用空间。</p>
+<p>另外，UDP没有流量控制，因此如果进程从缓存中读取报文段的速度不够快，缓存就会溢出，造成丢包。</p>
+<h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h3><p>1.客户端创建一个不含应用数据的报文段，SYN置1，并产生一个随机序号x，将这个报文段发送给服务端；<br>2.服务端收到后会为该TCP连接分配TCP缓存和变量，并返回一个同样不含应用数据的报文段，SYN置1，确认号为x+1，同样产生一个随机序号y；<br>3.客户端收到后分配TCP缓存和变量，并再次发给服务端一个报文段，确认号y+1，SYN置0，并且可以携带用用数据。</p>
+<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><ol>
+<li>客户端发送报文段，FIN置1</li>
+<li>服务端返回报文段，ACK置1</li>
+<li>服务端发送报文段，FIN置1，服务端关闭</li>
+<li>客户端返回报文段，ACK置1</li>
+<li>客户端等待一段时间关闭</li>
+</ol>
+<h3 id="TCP拥塞控制"><a href="#TCP拥塞控制" class="headerlink" title="TCP拥塞控制"></a>TCP拥塞控制</h3><p>TCP让每个发送方根据感知到的拥塞程度限制发送速率，没有拥塞就加大速率，有拥塞就减小速率。</p>
+<p>TCP发送端维护一个<strong>拥塞窗口（cwnd）</strong>，拥塞窗口限制了发送方未被确认的数据量，从而间接限制了发送速率。</p>
+<ul>
+<li>当出现超时或三次冗余ACK就意味着拥塞，这时就应当降低速率；</li>
+<li>当未确认报文段的确认到达时，说明网络通畅，这是应当增加速率；</li>
+<li>带宽探测：不断增加速率，当拥塞时降低速度，过段时间再次探测。</li>
+</ul>
+<p><strong>TCP拥塞控制算法</strong></p>
+<ul>
+<li><p>慢启动</p>
+<p>  首先将cwnd设置为1个MSS，收到一次确认就增加一个MSS，即1变2、2变4，指数增长。</p>
+<ul>
+<li><p>当产生一个超时时，<strong>慢启动阈值（ssthresh）</strong>设置为cwnd的一半，并重置cwnd，再次慢启动</p>
+</li>
+<li><p>当cwnd超过ssthresh时，从慢启动转为拥塞避免模式</p>
+</li>
+<li><p>当检测到3个冗余ACK，TCP执行快速重传并进入快速恢复状态</p>
+</li>
+</ul>
+</li>
+<li><p>拥塞避免</p>
+<p>  每个RTT增加一个MSS</p>
+<ul>
+<li><p>超时时，和慢启动处理方式相同，ssthresh设置为cwnd的一半，cwnd置为1个MSS</p>
+</li>
+<li><p>3个冗余ACK时，cwnd = cwnd / 2 + 3，ssthresh置为cwnd的一半，并进入快速恢复状态</p>
+</li>
+</ul>
+</li>
+<li><p>快速恢复</p>
+<p>  对于引起进入快速恢复的丢失报文段，对收到的每个冗余的ACK，cwnd的值加一个MSS；之后当丢失报文段的ACK到达时，TCP在降低cwnd后进入拥塞避免。如果出现超时，和上面两种方式相同，ssthresh变为cwnd的一半，cwnd置为1个MSS。</p>
+</li>
+</ul>
+<h1 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h1><pre><code>网络层分为数据平面和控制平面，数据平面负责转发（硬件实现），即分组从路由器入口链路到出口的链路本地动作；控制平面负责路由选择（软件实现），指分组从源到目的地采取的路径。
+</code></pre><h2 id="分组交换"><a href="#分组交换" class="headerlink" title="分组交换"></a>分组交换</h2><p>分组交换机分为两类</p>
+<ul>
+<li>链路层交换机：基于链路层帧的字段做转发</li>
+<li>路由器：基于网络层数据包的首部字段做转发</li>
+</ul>
+<p>多数<strong>分组交换机</strong>使用<strong>存储转发传输机制</strong>，即转发一个分组时该分组的每个部分必须已经全部接收，一条链路有一个<strong>输出缓存</strong>，用于存储分组，如果该链路正在传输别的分组，那就要排队并承受<strong>排队时延</strong>，缓存满则会产生<strong>丢包</strong>。</p>
+<p><strong>分组时延</strong></p>
+<ul>
+<li>处理时延：检查分组首部和决定将其导向何处的时间</li>
+<li>排队时延：如上所述</li>
+<li>传输时延：路由器推出分组的时间，分组长度（L bit）/ 链路传输速率（R Mbps）</li>
+<li>传播时延：一个bit从一台路由器到另一台路由器的时间，距离 / 物理媒介速率</li>
+</ul>
+<p><strong>分组调度</strong></p>
+<p>即排队的分组如何经输出链路传输的问题。</p>
+<ul>
+<li>先进先出</li>
+<li>优先权排队：分优先级成不同队列，每个队列先进先出</li>
+<li>循环和加权公平排队：分组像优先权排队那样分类，循环每个类保证公平传输，每个类分到的资源取决于自己的权重比所有类别权重和。</li>
+</ul>
+<p><strong>路由器工作原理</strong><br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">       路由选择处理器（路由选择，控制平面）</span></span><br><span class="line"><span class="code">           |</span></span><br><span class="line">输入端口 -&gt; 交换结构 -&gt; 输出端口（转发，数据平面）</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>输入端口查询转发表决定路由器的输出端口</li>
+<li>交换结构连接输入端口和输出端口</li>
+<li>输出端口接收交换结构中的分组</li>
+<li>路由选择处理器维护更新转发表，与其他网络路由器的路由选择处理器交互</li>
+</ul>
+<p>交换结构中可以采用三种方式完成：内存交换、总线交换、多条总线组成的纵横式交换（非阻塞，并行转发多个分组）。</p>
+<h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><p>IP的服务模型是<strong>尽力而为交付服务</strong>，不做任何保证，因此IP被称为<strong>不可靠服务</strong>。</p>
+<p><strong>IPv4的数据报格式</strong></p>
+<p><img src="计算机网络\IPv4.jpg" alt=""></p>
+<ul>
+<li>版本：4比特，规定IP协议版本</li>
+<li>首部长度：4比特，由于可能存在的选项字段而标识首部长度，选项为空时首部长度20字节</li>
+<li>服务类型：区分不同类型的IP数据包，如要求低时延的实时数据包（IP电话应用）及非实时数据包（FTP）等。</li>
+<li>数据包长度：首部加数据的总字节数</li>
+<li>标识、标志、片偏移：与IP分片有关</li>
+<li>寿命：每当经过一台路由器，寿命-1，若寿命为0则丢弃，防止数据包一直在网络中循环</li>
+<li>协议：指示交付给哪个运输层协议，值为6表示要交给TCP，17位UDP，类似于端口号的概念</li>
+<li>首部检验和：首部中每2个字节看成一个数，和的反码存入其中。TCP/UDP会对整个报文段进行检验，而IP只对首部检验</li>
+<li>数据：一般为需要交付的运输层报文段（TCP或UDP）</li>
+</ul>
+<p><strong>IPv4数据包分片</strong></p>
+<p>一个链路层帧能承载的最大数据量叫做<strong>最大传送单元（MTU）</strong>，如果MTU小于数据包长度，则需要分片，分片的最后一片标志位0，其余为1，偏移可以指定该片在原数据包的位置。</p>
+<h3 id="IPv4编码"><a href="#IPv4编码" class="headerlink" title="IPv4编码"></a>IPv4编码</h3><p>主机与物理链路之间的边界叫做<strong>接口</strong>，每个路由器至少两条链路，<strong>IP地址与接口关联，而不是与主机或路由器</strong>，因此一个路由器通常有多个IP地址。</p>
+<p>所有具有相同前缀的IP地址共同形成<strong>子网</strong>，该子网被分配一个地址a.b.c.d/x，这种/x的记法也叫作<strong>子网掩码</strong>，一个数据包进入子网会使用<strong>最长前缀匹配</strong>。</p>
+<p>当一台主机发出一个目的地址为<strong>255.255.255.255</strong>的数据报时，会向同网络所有主机广播。</p>
+<p><strong>动态主机配置协议</strong>（DHCP）允许主机自动获得一个IP地址，可以在每次连接时分配一个相同的IP地址也可以每次不同。DHCP也可以允许主机知道它的子网掩码、它的第一跳路由器地址（<strong>默认网关</strong>）以及它的本地DNS服务器地址。</p>
+<p>一个子网有一台DHCP服务器或者DHCP中继代理（一般是一台路由器），一个新主机向端口67发送UDP报文，即<strong>DHCP发现报文</strong>，通过子网广播的形式找到DHCP服务器。</p>
+<p><strong>网络地址转换</strong>（NAT）通过改变端口号识别主机，改变的端口号维护在<strong>NAT转换表</strong>中。</p>
+<h3 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h3><p><strong>IPv6数据包格式</strong></p>
+<p><img src="计算机网络\IPv6.jpg" alt=""></p>
+<ul>
+<li>版本：表示IP版本号，值为6</li>
+<li>流量类型：区分不同类型的IP数据包，如要求低时延的实时数据包（IP电话应用）及非实时数据包（FTP）等。</li>
+<li>流标签：设定优先权</li>
+<li>有效载荷长度：数据的长度</li>
+<li>下一个首部：交付给哪个协议（TCP/UDP等）</li>
+<li>跳限制：途径路由器令该值-1，到0丢弃</li>
+</ul>
+<p>与IPv4相比的变化：</p>
+<ul>
+<li>首部变为40字节</li>
+<li>没有分片机制，如果数据报过大路由器会丢弃并向发送方返回差错报文，令其重发较小长度的数据报</li>
+<li>去除首部检验和</li>
+<li>去除选项</li>
+</ul>
+<p>IPv4到IPv6的迁移方式：<br><strong>建隧道</strong>：两个IPv6的节点中间的IPv4路由器集合叫做隧道，发出的IPv6节点将数据报封装为一个IPv4数据报，数据部分存储完整的IPv6数据报，到隧道另一端再解开。</p>
+<h2 id="控制平面"><a href="#控制平面" class="headerlink" title="控制平面"></a>控制平面</h2><p>维护转发表和流表的两种形式：</p>
+<ul>
+<li><strong>每路由器控制</strong>：每台路由器运行自己的路由选择算法，路由器中的路由选择组件可以和其他路由器的路由选择组件通信来计算转发表的值。</li>
+<li><strong>逻辑集中式控制</strong>：数据平面与控制平面完全分离，每个路由器有一个控制代理（CA），用来和远端的逻辑集中式路由选择控制器通信，CA之间不通信。</li>
+</ul>
+<h3 id="路由选择算法"><a href="#路由选择算法" class="headerlink" title="路由选择算法"></a>路由选择算法</h3><p>路由之间的链路有开销，如果两条路径一样开销，短者是<strong>最低开销路径</strong>。</p>
+<p>路由选择算法有三种分类：</p>
+<ul>
+<li><p>按照集中分散划分</p>
+<ul>
+<li><strong>集中式路由选择算法</strong>，要求计算之前获得所有节点连通性及开销，称为<strong>链路状态（LS）算法</strong>，使用Dijkstra算法可以找出最短路径。</li>
+<li><strong>分散式路由选择算法</strong>，路由器以迭代、分布式的方式计算最低开销路径，没有节点拥有完整信息，<strong>距离向量（DV）算法</strong>就是一种分散式路由选择算法，DV算法是异步的、迭代的、自我终止的、分布式的，首先每个节点计算自己到邻居的距离，然后通知邻居自己的计算结果，每个接到计算结果的节点更新自己维护的表，如果有更新则继续通知邻居直到没有更新为止。</li>
+</ul>
+</li>
+<li><p>按照负载敏感迟钝划分</p>
+<ul>
+<li><strong>负载敏感算法</strong>会趋于绕开拥塞的链路。</li>
+<li><strong>负载迟钝算法</strong>是当今因特网主流路由选择算法。</li>
+</ul>
+</li>
+</ul>
+<p><strong>ICMP：因特网控制报文协议</strong>，最典型应用是差错报告，位于IP的有效载荷中，ping程序就是发送ICMP报文，目的主机发回一个类型0编码0的ICMP回显回答。</p>
+<h1 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h1><p>主机或路由器的<strong>适配器</strong>（即<strong>网络接口</strong>）具有<strong>链路层地址</strong>，也即<strong>MAC地址</strong>。<br><strong>地址解析协议（ARP）</strong> 将IP地址解析为MAC地址。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/19/设计模式/" rel="prev" title="设计模式">
+                设计模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Mapleaf" />
+            
+              <p class="site-author-name" itemprop="name">Mapleaf</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#应用层"><span class="nav-number">1.</span> <span class="nav-text">应用层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP报文格式"><span class="nav-number">1.1.1.</span> <span class="nav-text">HTTP报文格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie"><span class="nav-number">1.1.2.</span> <span class="nav-text">cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web缓存"><span class="nav-number">1.1.3.</span> <span class="nav-text">Web缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与SMTP对比"><span class="nav-number">1.1.4.</span> <span class="nav-text">与SMTP对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMTP"><span class="nav-number">1.2.</span> <span class="nav-text">SMTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-number">1.3.</span> <span class="nav-text">DNS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运输层"><span class="nav-number">2.</span> <span class="nav-text">运输层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多路复用与多路分解"><span class="nav-number">2.1.</span> <span class="nav-text">多路复用与多路分解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-number">2.2.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">2.3.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回退N步（GBN）"><span class="nav-number">2.3.1.</span> <span class="nav-text">回退N步（GBN）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择重传（SR）"><span class="nav-number">2.3.2.</span> <span class="nav-text">选择重传（SR）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP连接"><span class="nav-number">2.3.3.</span> <span class="nav-text">TCP连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP报文段结构"><span class="nav-number">2.3.4.</span> <span class="nav-text">TCP报文段结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#往返时间的估计和超时"><span class="nav-number">2.3.5.</span> <span class="nav-text">往返时间的估计和超时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重传超时间隔加倍"><span class="nav-number">2.3.6.</span> <span class="nav-text">重传超时间隔加倍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速重传"><span class="nav-number">2.3.7.</span> <span class="nav-text">快速重传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流量控制"><span class="nav-number">2.3.8.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三次握手"><span class="nav-number">2.3.9.</span> <span class="nav-text">三次握手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四次挥手"><span class="nav-number">2.3.10.</span> <span class="nav-text">四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP拥塞控制"><span class="nav-number">2.3.11.</span> <span class="nav-text">TCP拥塞控制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络层"><span class="nav-number">3.</span> <span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分组交换"><span class="nav-number">3.1.</span> <span class="nav-text">分组交换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP"><span class="nav-number">3.2.</span> <span class="nav-text">IP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IPv4编码"><span class="nav-number">3.2.1.</span> <span class="nav-text">IPv4编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPv6"><span class="nav-number">3.2.2.</span> <span class="nav-text">IPv6</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制平面"><span class="nav-number">3.3.</span> <span class="nav-text">控制平面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#路由选择算法"><span class="nav-number">3.3.1.</span> <span class="nav-text">路由选择算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链路层"><span class="nav-number">4.</span> <span class="nav-text">链路层</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mapleaf</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
