@@ -110,24 +110,24 @@
 
   <meta name="description" content="源码传送门 惯例先来看效果图：  最近产品同学的需求，要求定制一个可拖拽可编辑的文本，原本觉得还挺简单，不就是写个EditText处理一下touch事件么，后来做了发现还有些小坑，记录一下，顺便给大家做个参考 试错首先我尝试自定义一个EditText，重写onTouchEvent（）方法，在其中做随手势的操作，代码比较简单就不贴了，但是重写之后点击无法唤出软键盘，看了一下在TextView的源码中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个可以随手势拖动的EditText">
-<meta property="og:url" content="http://yoursite.com/2018/09/19/一个可以随手势拖动的EditText/index.html">
+<meta property="og:title" content="随手势拖动的EditText且附带解决软键盘遮挡终极方法">
+<meta property="og:url" content="http://yoursite.com/2018/09/19/随手势拖动的EditText且附带解决软键盘遮挡终极方法/index.html">
 <meta property="og:site_name" content="Mapleaf">
 <meta property="og:description" content="源码传送门 惯例先来看效果图：  最近产品同学的需求，要求定制一个可拖拽可编辑的文本，原本觉得还挺简单，不就是写个EditText处理一下touch事件么，后来做了发现还有些小坑，记录一下，顺便给大家做个参考 试错首先我尝试自定义一个EditText，重写onTouchEvent（）方法，在其中做随手势的操作，代码比较简单就不贴了，但是重写之后点击无法唤出软键盘，看了一下在TextView的源码中">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/09/19/一个可以随手势拖动的EditText/demo.gif">
-<meta property="og:updated_time" content="2018-09-19T11:03:22.449Z">
+<meta property="og:image" content="http://yoursite.com/2018/09/19/随手势拖动的EditText且附带解决软键盘遮挡终极方法/demo.gif">
+<meta property="og:updated_time" content="2018-09-19T11:06:34.085Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个可以随手势拖动的EditText">
+<meta name="twitter:title" content="随手势拖动的EditText且附带解决软键盘遮挡终极方法">
 <meta name="twitter:description" content="源码传送门 惯例先来看效果图：  最近产品同学的需求，要求定制一个可拖拽可编辑的文本，原本觉得还挺简单，不就是写个EditText处理一下touch事件么，后来做了发现还有些小坑，记录一下，顺便给大家做个参考 试错首先我尝试自定义一个EditText，重写onTouchEvent（）方法，在其中做随手势的操作，代码比较简单就不贴了，但是重写之后点击无法唤出软键盘，看了一下在TextView的源码中">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/19/一个可以随手势拖动的EditText/demo.gif">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/19/随手势拖动的EditText且附带解决软键盘遮挡终极方法/demo.gif">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/19/一个可以随手势拖动的EditText/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/19/随手势拖动的EditText且附带解决软键盘遮挡终极方法/"/>
 
 
 
@@ -137,7 +137,7 @@
   };
 </script>
 
-  <title>一个可以随手势拖动的EditText | Mapleaf</title>
+  <title>随手势拖动的EditText且附带解决软键盘遮挡终极方法 | Mapleaf</title>
   
 
 
@@ -298,7 +298,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/一个可以随手势拖动的EditText/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/随手势拖动的EditText且附带解决软键盘遮挡终极方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mapleaf">
@@ -315,7 +315,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一个可以随手势拖动的EditText
+          <h1 class="post-title" itemprop="name headline">随手势拖动的EditText且附带解决软键盘遮挡终极方法
               
             
           </h1>
@@ -340,7 +340,7 @@
                 
               
 
-              <time title="创建时间：2018-09-19 09:45:20 / 修改时间：19:03:22" itemprop="dateCreated datePublished" datetime="2018-09-19T09:45:20+08:00">2018-09-19</time>
+              <time title="创建时间：2018-09-19 09:45:20 / 修改时间：19:06:34" itemprop="dateCreated datePublished" datetime="2018-09-19T09:45:20+08:00">2018-09-19</time>
             
 
             
@@ -398,7 +398,7 @@
       
         <p><a href="https://github.com/xytyl/SwipeEditText/tree/master" target="_blank" rel="noopener">源码传送门</a></p>
 <p><strong>惯例先来看效果图</strong>：</p>
-<p><img src="/2018/09/19/一个可以随手势拖动的EditText/demo.gif" alt=""></p>
+<p><img src="/2018/09/19/随手势拖动的EditText且附带解决软键盘遮挡终极方法/demo.gif" alt=""></p>
 <p>最近产品同学的需求，要求定制一个可拖拽可编辑的文本，原本觉得还挺简单，不就是写个EditText处理一下touch事件么，后来做了发现还有些小坑，记录一下，顺便给大家做个参考</p>
 <h3 id="试错"><a href="#试错" class="headerlink" title="试错"></a>试错</h3><p>首先我尝试自定义一个EditText，重写onTouchEvent（）方法，在其中做随手势的操作，代码比较简单就不贴了，但是重写之后点击无法唤出软键盘，看了一下在TextView的源码中有关于软键盘的部分，尝试了一下自行唤醒未果，由于开发时间紧张所以没有深入研究，后期会补上，于是换了另一种方式。</p>
 <h3 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h3><p>自定义一个FrameLayout，在里面放一个EditText，触摸事件交给外层FrameLayout处理，这里采用内部拦截法。</p>
