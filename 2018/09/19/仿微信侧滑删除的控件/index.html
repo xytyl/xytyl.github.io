@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="源码传送门 首先看一下效果图：  基本思路是自定义一个ViewGroup作为RecyclerView中的条目，通过手势侧滑拉出删除按钮，动态改变删除按钮的宽度。 在网上也看了很多类似的实现，大多非常麻烦，我参考了Android动手实现一个侧滑删除控件，支持Recyclerview大神的实现，做出了这个控件。 实现过程首先参考条目的布局：1234567891011121314151617181920">
+<meta property="og:type" content="article">
+<meta property="og:title" content="仿微信侧滑删除的控件">
+<meta property="og:url" content="http://yoursite.com/2018/09/19/仿微信侧滑删除的控件/index.html">
+<meta property="og:site_name" content="Mapleaf">
+<meta property="og:description" content="源码传送门 首先看一下效果图：  基本思路是自定义一个ViewGroup作为RecyclerView中的条目，通过手势侧滑拉出删除按钮，动态改变删除按钮的宽度。 在网上也看了很多类似的实现，大多非常麻烦，我参考了Android动手实现一个侧滑删除控件，支持Recyclerview大神的实现，做出了这个控件。 实现过程首先参考条目的布局：1234567891011121314151617181920">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/09/19/仿微信侧滑删除的控件/仿微信侧滑删除的控件/SwipeView.gif">
+<meta property="og:updated_time" content="2018-09-18T14:39:58.490Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="仿微信侧滑删除的控件">
+<meta name="twitter:description" content="源码传送门 首先看一下效果图：  基本思路是自定义一个ViewGroup作为RecyclerView中的条目，通过手势侧滑拉出删除按钮，动态改变删除按钮的宽度。 在网上也看了很多类似的实现，大多非常麻烦，我参考了Android动手实现一个侧滑删除控件，支持Recyclerview大神的实现，做出了这个控件。 实现过程首先参考条目的布局：1234567891011121314151617181920">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/19/仿微信侧滑删除的控件/仿微信侧滑删除的控件/SwipeView.gif">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/19/仿微信侧滑删除的控件/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>仿微信侧滑删除的控件 | Mapleaf</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mapleaf</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/仿微信侧滑删除的控件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mapleaf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mapleaf">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">仿微信侧滑删除的控件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-19 09:45:20" itemprop="dateCreated datePublished" datetime="2018-09-19T09:45:20+08:00">2018-09-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-18 22:39:58" itemprop="dateModified" datetime="2018-09-18T22:39:58+08:00">2018-09-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/项目笔记/" itemprop="url" rel="index"><span itemprop="name">项目笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/xytyl/SwipeView" target="_blank" rel="noopener">源码传送门</a></p>
+<p>首先看一下效果图：</p>
+<p><img src="仿微信侧滑删除的控件/SwipeView.gif" alt=""></p>
+<p>基本思路是自定义一个<code>ViewGroup</code>作为<code>RecyclerView</code>中的条目，通过手势侧滑拉出删除按钮，动态改变删除按钮的宽度。</p>
+<p>在网上也看了很多类似的实现，大多非常麻烦，我参考了<a href="https://www.jianshu.com/p/e2c92d5a3cdc" target="_blank" rel="noopener">Android动手实现一个侧滑删除控件，支持Recyclerview</a>大神的实现，做出了这个控件。</p>
+<h1 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h1><p>首先参考条目的布局：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;FrameLayout</span><br><span class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;55dp&quot;</span><br><span class="line">    android:background=&quot;#0e0e0e&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;xmt.baofeng.xmt.mobileapp.ui.view.SwipeView</span><br><span class="line">        android:layout_width=&quot;match_parent&quot;</span><br><span class="line">        android:layout_height=&quot;match_parent&quot;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;LinearLayout</span><br><span class="line">            android:id=&quot;@+id/ll_usb&quot;</span><br><span class="line">            android:layout_width=&quot;match_parent&quot;</span><br><span class="line">            android:layout_height=&quot;match_parent&quot;&gt;</span><br><span class="line"></span><br><span class="line">            &lt;TextView</span><br><span class="line">                android:layout_width=&quot;0dp&quot;</span><br><span class="line">                android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">                android:layout_gravity=&quot;center_vertical&quot;</span><br><span class="line">                android:layout_marginLeft=&quot;15dp&quot;</span><br><span class="line">                android:layout_weight=&quot;1&quot;</span><br><span class="line">                android:text=&quot;湮灭.720p.HD中英双字&quot;</span><br><span class="line">                android:textColor=&quot;#999999&quot;</span><br><span class="line">                android:textSize=&quot;14sp&quot;/&gt;</span><br><span class="line"></span><br><span class="line">        &lt;/LinearLayout&gt;</span><br><span class="line"></span><br><span class="line">        &lt;TextView</span><br><span class="line">            android:id=&quot;@+id/tv_usb_delete&quot;</span><br><span class="line">            android:layout_width=&quot;80dp&quot;</span><br><span class="line">            android:layout_height=&quot;match_parent&quot;</span><br><span class="line">            android:background=&quot;@color/colorRed&quot;</span><br><span class="line">            android:gravity=&quot;center&quot;</span><br><span class="line">            android:text=&quot;删除&quot;</span><br><span class="line">            android:textColor=&quot;#ffffff&quot;</span><br><span class="line">            android:textSize=&quot;14sp&quot;/&gt;</span><br><span class="line">    &lt;/xmt.baofeng.xmt.mobileapp.ui.view.SwipeView&gt;</span><br><span class="line"></span><br><span class="line">&lt;/FrameLayout&gt;</span><br></pre></td></tr></table></figure></p>
+<p>外层必须用<code>FrameLayout</code>或者其他布局包裹，内层是我们自定义的<code>SwipeView</code>，<code>SwipeView</code>内部只能有两个子<code>View</code>，第一个子<code>View</code>是我们需要显示的内容，第二个子<code>View</code>就是删除按钮。</p>
+<p>剩下的重头戏就在自定义<code>SwipeView</code>了，<code>SwipeView</code>继承自<code>ViewGroup</code>，下面两个方法没什么好说，就是测量和布局。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) &#123;</span><br><span class="line">    super.onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">    measureChildren(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">    int width = MeasureSpec.getSize(widthMeasureSpec);</span><br><span class="line">    View child = getChildAt(0);</span><br><span class="line">    int margin = ((MarginLayoutParams) child.getLayoutParams()).topMargin</span><br><span class="line">            + ((MarginLayoutParams) child.getLayoutParams()).bottomMargin;</span><br><span class="line">    setMeasuredDimension(width, getChildAt(0).getMeasuredHeight() + margin);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">protected void onLayout(boolean changed, int l, int t, int r, int b) &#123;</span><br><span class="line">    getChildAt(0).layout(l, t, r, b);</span><br><span class="line"></span><br><span class="line">    View view = getChildAt(1);</span><br><span class="line">    view.layout(r, t, r + view.getMeasuredWidth(), b);	//删除按钮排布在第一个View之后</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来是最重要的<code>onTouchEvent</code>的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public boolean onTouchEvent(MotionEvent event) &#123;</span><br><span class="line">    if(!scroller.isFinished())&#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    switch (event.getAction()) &#123;</span><br><span class="line">        case MotionEvent.ACTION_MOVE:</span><br><span class="line">            moveX = (int) event.getRawX();</span><br><span class="line">            int moved = moveX - downX;</span><br><span class="line">            if (isShowRight) &#123;</span><br><span class="line">                moved -= deleteWidth;	//如果已经展示出删除按钮，移动距离+删除按钮的宽度</span><br><span class="line">            &#125;</span><br><span class="line">            if (-moved &lt;= deleteWidth) &#123;</span><br><span class="line">                scrollTo(-moved, 0);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                int delta = -moved - deleteWidth;</span><br><span class="line">                int percent = (int) ((deleteWidth - delta / 5) / (float) deleteWidth * delta);	//这里做了一个限制，越往左划越难划，没什么卵用，就是看上去酷一点</span><br><span class="line">                View view = getChildAt(1);</span><br><span class="line">                LayoutParams layoutParams = view.getLayoutParams();</span><br><span class="line">                layoutParams.width = deleteWidth + percent;	//随着向左划增加删除按钮的宽度</span><br><span class="line">                view.setLayoutParams(layoutParams);</span><br><span class="line">                scrollTo(deleteWidth + percent, 0);</span><br><span class="line">            &#125;</span><br><span class="line">            if (getScrollX() &lt;= 0) &#123;</span><br><span class="line">                scrollTo(0, 0);</span><br><span class="line">            &#125;</span><br><span class="line">            break;</span><br><span class="line">        case MotionEvent.ACTION_CANCEL:</span><br><span class="line">        case MotionEvent.ACTION_UP:</span><br><span class="line">            if (getScrollX() &gt;= deleteWidth / 2) &#123;</span><br><span class="line">                isShowRight = true;</span><br><span class="line">                sView = this;</span><br><span class="line">                recoverAnimation();</span><br><span class="line">                smoothScrollToPosition(deleteWidth);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                isShowRight = false;</span><br><span class="line">                smoothScrollToPosition(0);</span><br><span class="line">            &#125;</span><br><span class="line">            break;</span><br><span class="line">        default:</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">private void smoothScrollToPosition(int destX) &#123;	//利用scroller实现弹性滑动</span><br><span class="line">       int width = getScrollX();</span><br><span class="line">       int delta = destX - width;</span><br><span class="line">       scroller.startScroll(width, 0, delta, 0, 500);</span><br><span class="line">       invalidate();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">private void recoverAnimation() &#123;	//在手抬起时需要恢复删除按钮的宽度</span><br><span class="line">       final View view = getChildAt(1);</span><br><span class="line">       final SwipeLayoutParams swipeLayoutParams = new SwipeLayoutParams(view.getLayoutParams());</span><br><span class="line">       ObjectAnimator animator = ObjectAnimator.ofInt(swipeLayoutParams, &quot;width&quot;, deleteWidth).setDuration(500);</span><br><span class="line">       animator.setInterpolator(new ViscousFluidInterpolator());	//使用和scroller一样的插值器，我直接把scroller的插值器粘贴过来了=。=</span><br><span class="line">       animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onAnimationUpdate(ValueAnimator animation) &#123;</span><br><span class="line">               view.setLayoutParams(swipeLayoutParams);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">       animator.start();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>deleteWidth是我们在按下时获取到的删除按钮的宽度，因为一会儿会改变按钮的宽度，所以在DOWN时记录原始宽度，DOWN在后面onInterceptTouchEvent方法中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public boolean onInterceptTouchEvent(MotionEvent ev) &#123;</span><br><span class="line">    switch (ev.getAction()) &#123;</span><br><span class="line">        case MotionEvent.ACTION_DOWN:</span><br><span class="line">            downX = (int) ev.getRawX();</span><br><span class="line">            if (sView != null &amp;&amp; sView != this) &#123;</span><br><span class="line">                sView.close();</span><br><span class="line">            &#125;</span><br><span class="line">            deleteWidth = getChildAt(1).getWidth();</span><br><span class="line">            break;</span><br><span class="line">        case MotionEvent.ACTION_MOVE:</span><br><span class="line">            moveX = (int) ev.getRawX();</span><br><span class="line">            if (Math.abs(moveX - downX) &gt; MAX_BOUNDARY) &#123;</span><br><span class="line">                getParent().requestDisallowInterceptTouchEvent(true);	//在左划时拦截事件，防止左划同时还能上下滑动</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            break;</span><br><span class="line">        default:</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    return super.onInterceptTouchEvent(ev);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>感觉有很多不合理的地方，希望有大神指出，阿里嘎多~~~</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/19/设计模式/" rel="next" title="设计模式">
+                <i class="fa fa-chevron-left"></i> 设计模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/19/一个可以上下左右滑动且当前项居中的ViewPager/" rel="prev" title="一个可以上下左右滑动且当前项居中的ViewPager">
+                一个可以上下左右滑动且当前项居中的ViewPager <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Mapleaf" />
+            
+              <p class="site-author-name" itemprop="name">Mapleaf</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实现过程"><span class="nav-number">1.</span> <span class="nav-text">实现过程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mapleaf</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
